@@ -20,7 +20,7 @@
 
             $(document).ready(function() {
 
-                $('.slider').slider({full_width: true, height: 700, indicators: false});
+                $('.slider').slider({full_width: false, indicators: false});
                 $('#backTop').backTop({
                     // the scroll position in px from the top
                     'position': 400,
@@ -46,7 +46,7 @@
                 <ul class="right hide-on-med-and-down">
                     <li><a href="index.html">首页</a></li>
                     <li><a href="customization.html">个性化定制</a></li>
-                    <li><a href="index.html">我们的特色</a></li>
+                    <li><a href="feature.html">我们的特色</a></li>
                     <li><a href="aboutUs.html">关于我们</a></li>
                     <li><a href="contact.html">联系我们</a></li>
                     <li><a class="mdi mdi-instagram inlineTitleBar" target="_blank" href="https://www.instagram.com/vividwa.perth/"></a>
@@ -64,7 +64,7 @@
                 <ul id="nav-mobile" class="side-nav">
                     <li><a href="index.html">首页</a></li>
                     <li><a href="customization.html">个性化定制</a></li>
-                    <li><a href="index.html">我们的特色</a></li>
+                    <li><a href="feature.html">我们的特色</a></li>
                     <li><a href="aboutUs.html">关于我们</a></li>
                     <li><a href="contact.html">联系我们</a></li>
                     <li><a href="index.html">English</a></li>
@@ -73,9 +73,9 @@
             </div>
         </nav>
 
-        <div class="parallax-container">
+        <div class="parallax-container" style="min-height: 20vh;height:40vw;overflow: visible">
 
-            <div class="slider">
+            <div class="slider fullscreen">
                 <ul class="slides">
                     <li ><img src="images/horse.jpg"></li>
                     <li><img  src="images/house.jpg"></li>
@@ -336,7 +336,8 @@
                             <a class="  white-text"   target="_blank" href="http://www.weibo.com/p/1005056171676943/home">
                                 <img style="position:relative;top:5px" width="29" height="29" src="images/weibo-white.png"/>
                             </a>
-
+                            <br/>
+                            <img class="responsive-img" src="images/vividwa_wechat.png" height="140" width="140"/>
                         </p>
                     </div>
                 </div>

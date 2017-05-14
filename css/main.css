@@ -7,7 +7,11 @@ and open the template in the editor.
     Created on : 2017-5-2, 17:59:55
     Author     : Nandy
 */
-
+@font-face
+{
+    font-family: myFirstFont;
+    src: url('Std_Neuzeit_GroteskBoldCond.otf') format("opentype");
+}
 
 .overlapPic{
     position:relative;
@@ -120,7 +124,32 @@ and open the template in the editor.
         width:130px;
     }
 
+    .cusDownloadBlack{
+        text-transform: uppercase;
+        border: 1px solid black;
+        padding: 7px 25px 2px 20px;
+        color: black;
+        font-size: 12px;
+        text-decoration: none;
+        text-align: center;
+        width:130px;
+        width:70%;
+        height:60px;
+        margin: 13px 13px;
+        max-width: 250px
+    }
+    .displaySmall{
+        display:block;
+    }
+
 }
+
+@media (min-width:993px) {
+    .displaySmall{
+        display:none;
+    }
+}
+
 @media (min-width:768px){
     .sectionMobile{
         display:none;
@@ -154,6 +183,27 @@ and open the template in the editor.
         text-align: center;
         width:160px;
     }
+
+    .cusDownloadBlack{
+        text-transform: uppercase;
+        border: 1px solid black;
+        padding: 10px 30px 3px 30px;
+        color: black;
+        font-size: 14px;
+        text-decoration: none;
+        margin: 1px auto;
+        text-align: center;
+        width:70%;
+        height:70px;
+        margin: 15px 15px;
+        max-width: 300px;
+    }
+
+}
+
+.cusDownloadBlack:hover{
+    color: white;
+    background-color: black;
 }
 
 .cusDivRight{
@@ -169,7 +219,10 @@ and open the template in the editor.
     text-align: right;
 }
 
-
+.cusButtonBlack:hover{
+    color: white;
+    background-color: black;
+}
 
 
 .cusButtonBlack:hover{
@@ -213,8 +266,25 @@ and open the template in the editor.
 }
 
 .logoStyle{
-        max-width:100%;
+    max-width:100%;
     max-height: 50px;
     margin:5px auto;
 }
+
+.redNumber{
+    margin: 0;
+    line-height: normal;
+    letter-spacing: normal;
+    color:red;
+    font: normal normal normal 130px/1.4em myFirstFont,sans-serif;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    outline: 0;
+    vertical-align: baseline;
+    background: transparent;
+    word-wrap: break-word;
+}
+
+
 
