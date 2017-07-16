@@ -142,6 +142,8 @@ and open the template in the editor.
         display:block;
     }
 
+
+
 }
 
 @media (min-width:993px) {
@@ -151,6 +153,7 @@ and open the template in the editor.
 }
 
 @media (min-width:768px){
+
     .sectionMobile{
         display:none;
     }
@@ -286,5 +289,9 @@ and open the template in the editor.
     word-wrap: break-word;
 }
 
+.indexIcon{
+   height:110px;
+   width:110px;
+}
 
 
