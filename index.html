@@ -29,6 +29,9 @@
                     // red, white, black or green
                     'color': 'black',
                 });
+                $("#tcContent").load("terms.html");
+
+                $('.modal').modal();
             });
 
 
@@ -305,7 +308,7 @@
 
             </div>
         </div>
-        
+
         <div class="container" style="width:98%;max-width:none ">
             <div class="section" style="width:100%">
 
@@ -347,6 +350,8 @@
         </div>
 
 
+
+
         <footer class="page-footer black">
             <div class="container">
                 <div class="row">
@@ -354,9 +359,16 @@
                         <h5 class="white-text">VIVID WA</h5>
 
                         <span class="white-text smallTitle"> PERTH</span>
-                        <span class="white-text smallTitle"> AUSTRALIA</span>
+                        <span class="white-text smallTitle"> AUSTRALIA</span><br/>
+                        <a href="#modalBank">  <img style="background-color:white"  width="90" height="60" src="images/paymentlogo/Westpac.jpeg"/>
+                        </a>
+                        <img style="background-color:white" width="90" height="60" src="images/paymentlogo/american_express.jpg"/>
+                        <img  style="background-color:white" width="90" height="60" src="images/paymentlogo/MasterCard.svg.png"/>
 
-                    </div>
+                        <img style="background-color:white"  width="90" height="60" src="images/paymentlogo/omipay.png"/>
+                        <img  style="background-color:white" width="90" height="60" src="images/paymentlogo/visa.png"/>
+
+                    </div>`
                     <div class="col l3 s12">
                         <p class="white-text">  Level 1, 330 Churchill avenue, <br/>
                             Subiaco 6008, Western Australia
@@ -364,8 +376,10 @@
                         </p>
                     </div>
                     <div class="col l3 s12">
-                        <p class="white-text"> <a class="white-text" href="tel:0893882208">电话: 08-93882208</a>
-                            <br/>邮箱: <a class="white-text" href="mailto:info@vividwa.com.au">info@vividwa.com.au</a></p>
+                        <p class="white-text"> <a class="white-text" href="tel:+61893882208">电话: +61-893882208</a>
+                            <br/>邮箱: <a class="white-text" href="mailto:info@vividwa.com.au">info@vividwa.com.au (一天内回复)</a>
+                            <br/>营业时间: 9:00 am - 5:00 pm (节假日除外)
+                        </p>
                     </div>
                     <div class="col l3 s12">
                         <p class="white-text"> 
@@ -385,10 +399,34 @@
             <div class="footer-copyright">
                 <a id="backTop" href="#">Back To Top</a>
                 <div class="container">
-                    © 2017 VIVIDWA. All rights reserved.
+                    © 2017 VIVIDWA. All rights reserved.  <a  style="color: rgba(255, 255, 255, 0.8);" href="#modalTC">Terms & Conditions 预订条款</a>
                 </div>
             </div>
         </footer>
+
+        <div id="modalTC" class="modal modal-fixed-footer">
+            <div class="modal-content" id="tcContent"></div>
+            <div class="modal-footer">
+                <a href="#!" class="modal-close waves-effect waves-green btn-flat">同意</a>
+            </div>
+        </div>
+
+        <div id="modalBank" class="modal modal-fixed-footer">
+            <div class="modal-content" id="bankContent">
+                <h4>银行信息</h4>
+                <p>
+                    银行: Westpac
+                    <br/>账户名称: Australian Tourism Association Pty Ltd
+                    <br/>BSB: 036-004
+                    <br/>账号: 552835
+                    <br/>Swift Code: WPACAU2S
+                    <br/> 银行地址: 116 James Street, Northbridge Western Australia, Australia, 6003
+                </p>
+            </div>
+            <div class="modal-footer">
+                <a href="#!" class="modal-close waves-effect waves-green btn-flat">确认</a>
+            </div>
+        </div>
 
 
     </body>

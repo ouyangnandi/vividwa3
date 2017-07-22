@@ -12,15 +12,18 @@
         <link href="css/main.css" type="text/css" rel="stylesheet" media="screen,projection"/>
         <link href="css/materialdesignicons.min.css" media="all" rel="stylesheet" type="text/css" />
         <link href="css/backTop.css" media="all" rel="stylesheet" type="text/css">
+        <link href="css/jquery.qtip.css" media="all" rel="stylesheet" type="text/css">
         <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.15.0/jquery.validate.min.js"></script>
         <script src="js/materialize.js"></script>
         <script src="js/init.js"></script>
         <script type="text/javascript" src="js/jquery.backTop.js"></script>
+        <script src="js/jquery.qtip.js"></script>
         <script type="text/javascript">
 
             $(document).ready(function() {
 
-                $('.slider').slider({full_width: true, height: 700, indicators: false});
+
                 $('#backTop').backTop({
                     // the scroll position in px from the top
                     'position': 400,
@@ -29,7 +32,85 @@
                     // red, white, black or green
                     'color': 'black',
                 });
+
+                $("#tcContent").load("terms.html");
+
+                $('.modal').modal();
+
+                $("#onlineOrder").validate({
+                    rules: {
+                        fullName: {
+                            required: true,
+                        },
+                        message: {
+                            required: true,
+                        },
+                        emailAddress: {
+                            required: true,
+                        },
+                    },
+                    errorPlacement: function(error, element) {
+                        var api = $(element).qtip('api');
+                        api.show();
+
+
+                    }
+                });
+                $("#onlineOrder").submit(function(e) {
+                    e.preventDefault();
+                });
+
+                $("#fullName").qtip({
+                    content: {
+                        text: $("#fullName").attr("placeholder") + "不能为空"
+                    }
+                });
+
+                $("#message").qtip({
+                    content: {
+                        text: $("#message").attr("placeholder") + "不能为空"
+                    }
+                });
+
+                $("#emailAddress").qtip({
+                    content: {
+                        text: $("#emailAddress").attr("placeholder") + "格式必须正确"
+                    }
+                });
             });
+
+            function onlineOrder() {
+
+                if ($("#onlineOrder").valid()) {
+                    $("#customoverlay").show();
+                    $("#preloader").show();
+                    $.ajax({
+                        url: 'backend/contact.php',
+                        type: 'post',
+                        dataType: 'json',
+                        data: $("#onlineOrder").serialize(),
+                        success: function(request) {
+                            $("#customoverlay").hide();
+                            $("#preloader").hide();
+                            if (request.status == "0") {
+
+                                $('#modalSuccess').modal('open');
+                                $("#onlineOrder")[0].reset();
+                            }
+                            else {
+                                $('#modalError').modal('open');
+
+                            }
+                        },
+                        error: function(request) {
+                            $("#customoverlay").hide();
+                            $("#preloader").hide();
+                            $('#modalError').modal('open');
+
+                        }
+                    });
+                }
+            }
 
 
 
@@ -109,11 +190,11 @@
                 <div class="row">
                     <div class="col s12 center">
                         <h3><i class="mdi-content-send brown-text"></i></h3>
-                        <h4 class="textShadow">联系我们</h4>
+                        <h4 class="textShadow" id="titleContact">联系我们</h4>
                         <h4>—</h4>
                         <p>Level1, 330 Churchill Avenue, Subiaco 6008, WA <br/>
-                            <a class="black-text" href="tel:0893882208">电话: 08-93882208</a>
-                            <br/>邮箱: <a class="black-text" href="mailto:info@vividwa.com.au">info@vividwa.com.au</a>
+                            <a class="black-text" href="tel:+6189388220">电话: +61-89388220</a>
+                            <br/>邮箱: <a class="black-text" href="mailto:info@vividwa.com.au">info@vividwa.com.au (一天内回复)</a>
                         </p>
                         <p class="black-text"> 
                             <a class="mdi mdi-instagram inlineTitleBar black-text" target="_blank" href="https://www.instagram.com/vividwa.perth/"></a>
@@ -129,13 +210,15 @@
 
                 <div class="row">
                     <div class="col s12 m12 center" >
-                        <div class="input-field center-align">
-                            <input placeholder="您的姓名" id="name" name="name" type="text" class="validate inputBlack"><br/>
-                            <input placeholder="您的邮箱" id="email" name="email" type="email" class="validate inputBlack"><br/>
-
-                            <textarea placeholder="您的留言" id="message" name="message"  class="validate inputTextArea" ></textarea><br/><br/>
-                            <div> <a href="#"  class="waves-effect waves-light cusButtonBlack" >发送</a></div>
-                        </div>
+                        <form id="onlineOrder"  method="post">
+                            <div class="input-field center-align">
+                                <input placeholder="您的姓名" id="fullName" name="fullName" type="text" class="validate inputBlack" required="" aria-required="true" ><br/>
+                                <input placeholder="您的邮箱" id="emailAddress" name="emailAddress" type="email" class="validate inputBlack" required="" aria-required="true" ><br/>
+                                <input placeholder="您的电话" id="phone" name="phone" type="text" class="validate inputBlack" ><br/>
+                                <textarea placeholder="您的留言" id="message" name="message"  class="validate inputTextArea" required="" aria-required="true" ></textarea><br/><br/>
+                                <div> <a href="#titleContact"  class="waves-effect waves-light cusButtonBlack" onclick="onlineOrder()" >发送</a></div>
+                            </div>
+                        </form>
                     </div>
                 </div>
 
@@ -188,8 +271,14 @@
                         <h5 class="white-text">VIVID WA</h5>
 
                         <span class="white-text smallTitle"> PERTH</span>
-                        <span class="white-text smallTitle"> AUSTRALIA</span>
+                        <span class="white-text smallTitle"> AUSTRALIA</span><br/>
+                        <a href="#modalBank">  <img style="background-color:white"  width="90" height="60" src="images/paymentlogo/Westpac.jpeg"/>
+                        </a>
+                        <img style="background-color:white" width="90" height="60" src="images/paymentlogo/american_express.jpg"/>
+                        <img  style="background-color:white" width="90" height="60" src="images/paymentlogo/MasterCard.svg.png"/>
 
+                        <img style="background-color:white"  width="90" height="60" src="images/paymentlogo/omipay.png"/>
+                        <img  style="background-color:white" width="90" height="60" src="images/paymentlogo/visa.png"/>
                     </div>
                     <div class="col l3 s12">
                         <p class="white-text">  Level 1, 330 Churchill avenue, <br/>
@@ -198,8 +287,10 @@
                         </p>
                     </div>
                     <div class="col l3 s12">
-                        <p class="white-text"> <a class="white-text" href="tel:0893882208">电话: 08-93882208</a>
-                            <br/>邮箱: <a class="white-text" href="mailto:info@vividwa.com.au">info@vividwa.com.au</a></p>
+                        <p class="white-text"> <a class="white-text" href="tel:+61893882208">电话: +61-893882208</a>
+                            <br/>邮箱: <a class="white-text" href="mailto:info@vividwa.com.au">info@vividwa.com.au (一天内回复)</a>
+                            <br/>营业时间: 9:00 am - 5:00 pm (节假日除外)
+                        </p>
                     </div>
                     <div class="col l3 s12">
                         <p class="white-text"> 
@@ -219,11 +310,67 @@
             <div class="footer-copyright">
                 <a id="backTop" href="#">Back To Top</a>
                 <div class="container">
-                    © 2017 VIVIDWA. All rights reserved.
+                    © 2017 VIVIDWA. All rights reserved.  <a  style="color: rgba(255, 255, 255, 0.8);" href="#modalTC">Terms & Conditions 预订条款</a>
                 </div>
             </div>
         </footer>
 
+        <div id="modalTC" class="modal modal-fixed-footer">
+            <div class="modal-content" id="tcContent"></div>
+            <div class="modal-footer">
+                <a href="#!" class="modal-close waves-effect waves-green btn-flat">同意</a>
+            </div>
+        </div>
 
+        <div id="modalBank" class="modal modal-fixed-footer">
+            <div class="modal-content" id="bankContent">
+                <h4>银行信息</h4>
+                <p>
+                    银行: Westpac
+                    <br/>账户名称: Australian Tourism Association Pty Ltd
+                    <br/>BSB: 036-004
+                    <br/>账号: 552835
+                    <br/>Swift Code: WPACAU2S
+                    <br/> 银行地址: 116 James Street, Northbridge Western Australia, Australia, 6003
+                </p>
+            </div>
+            <div class="modal-footer">
+                <a href="#!" class="modal-close waves-effect waves-green btn-flat">确认</a>
+            </div>
+        </div>
+
+        <!-- Modal Structure -->
+        <div id="modalSuccess" class="modal">
+            <div class="modal-content">
+                <h4 class="fontText">Success</h4>
+                <p class="fontText">Email has been sent to our custom service team successfully.We will contact you in a few hours.</p>
+            </div>
+            <div class="modal-footer">
+                <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat fontText">OK</a>
+            </div>
+        </div>
+
+        <div id="modalError" class="modal">
+            <div class="modal-content">
+                <h4 class="fontText">Error</h4>
+                <p class="fontText">There is an error happend in our system. Send email info@vividwa.com.au directly</p>
+            </div>
+            <div class="modal-footer">
+                <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat fontText">OK</a>
+            </div>
+        </div>
+
+        <div id="customoverlay"></div>
+        <div class="preloader-wrapper big active" id="preloader" style="top:140%">
+            <div class="spinner-layer spinner-blue-only">
+                <div class="circle-clipper left">
+                    <div class="circle"></div>
+                </div><div class="gap-patch">
+                    <div class="circle"></div>
+                </div><div class="circle-clipper right">
+                    <div class="circle"></div>
+                </div>
+            </div>
+        </div>
     </body>
 </html>

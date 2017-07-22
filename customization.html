@@ -12,8 +12,12 @@
         <link href="css/main.css" type="text/css" rel="stylesheet" media="screen,projection"/>
         <link href="css/materialdesignicons.min.css" media="all" rel="stylesheet" type="text/css" />
         <link href="css/backTop.css" media="all" rel="stylesheet" type="text/css">
+        <link href="css/jquery.qtip.css" media="all" rel="stylesheet" type="text/css">
         <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
         <script src="js/materialize.js"></script>
+        <script src="js/jquery.qtip.js"></script>
+
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.15.0/jquery.validate.min.js"></script>
         <script src="js/init.js"></script>
         <script type="text/javascript" src="js/jquery.backTop.js"></script>
         <script type="text/javascript">
@@ -28,7 +32,89 @@
                     // red, white, black or green
                     'color': 'black',
                 });
+
+
+
+                $("#tcContent").load("terms.html");
+
+                $('.modal').modal();
+
+                $("#onlineOrder").validate({
+                    rules: {
+                        fullName: {
+                            required: true,
+                        },
+                        location: {
+                            required: true,
+                        },
+                        emailAddress: {
+                            required: true,
+                        },
+                    },
+                    errorPlacement: function(error, element) {
+                        var api = $(element).qtip('api');
+                        api.show();
+
+
+                    }
+                });
+                $("#onlineOrder").submit(function(e) {
+                    e.preventDefault();
+                });
+
+                $("#fullName").qtip({
+                    content: {
+                        text: $("#fullName").attr("placeholder") + "不能为空"
+                    }
+
+
+                });
+
+                $("#location").qtip({
+                    content: {
+                        text: $("#location").attr("placeholder") + "不能为空"
+                    }
+                });
+
+                $("#emailAddress").qtip({
+                    content: {
+                        text: $("#emailAddress").attr("placeholder") + "格式必须正确"
+                    }
+                });
             });
+
+            function onlineOrder() {
+
+                if ($("#onlineOrder").valid()) {
+                    $("#customoverlay").show();
+                    $("#preloader").show();
+                    $.ajax({
+                        url: 'backend/orderOnline.php',
+                        type: 'post',
+                        dataType: 'json',
+                        data: $("#onlineOrder").serialize(),
+                        success: function(request) {
+                            $("#customoverlay").hide();
+                            $("#preloader").hide();
+                            if (request.status == "0") {
+
+                                $('#modalSuccess').modal('open');
+                                $("#onlineOrder")[0].reset();
+                            }
+                            else {
+                                $('#modalError').modal('open');
+
+                            }
+                        },
+                        error: function(request) {
+                            $("#customoverlay").hide();
+                            $("#preloader").hide();
+                            $('#modalError').modal('open');
+
+                        }
+                    });
+                }
+            }
 
 
 
@@ -78,42 +164,38 @@
             <div class="section">
                 <div class="row">
                     <div class="col s12 center">
-                        <div>
-                            <div class="cusDivLeft">   <img class="responsive-img" src="images/bridge.jpg"/></div>
-                            <div class="cusDivRight">
-                                <div class="left-align" >
-                                    <p class="cusTitle">
-                                        About us 关于我们</p></div>
-                                <div> <a href="aboutUs.html"  class="waves-effect waves-light cusButtonBlack" >合作伙伴</a></div>
-                            </div>
-                        </div>
+                        <h3><i class="mdi-content-send brown-text"></i></h3>
+                        <h4 class='textShadow'>个性化定制</h4>
+                        <h4>—</h4>
+                        <p>您只要决定出发</p>
+                        <p>剩下所有的一切，交给我们就好</p>
+
                     </div>
                 </div>
+
                 <div class="row">
-                    <div class="col s12 center">
-                        <div>
-                            <div class="cusDivLeft">   <img class="responsive-img" src="images/surfing.jpg"/></div>
-                            <div class="cusDivRight">
-                                <div class="left-align" >
-                                    <p class="cusTitle">
-                                        About WA 关于西澳</p></div>
-                                <div> <a href="feature.html"  class="waves-effect waves-light cusButtonBlack" >探秘</a></div>
+
+                    <form id="onlineOrder"  method="post">
+                        <div class="col s12 m12 center" >
+                            <div class="input-field left-align" style="margin-left:20%">
+                                <input placeholder="海外目的地" id="location" name="location" type="text" class="validate inputBlackSmall"  required="" aria-required="true" > <div class="newlineMobile">* 必填。可输入多个，分别用逗号分开。如：帕斯，巴塞尔顿</div><br/>
+                                <input placeholder="出发日期" id="departureDate" name="departureDate" type="text" class="validate inputBlackSmall"  > <div class="newlineMobile"> * 请输入 年-月-日</div><br/>
+                                <input placeholder="行程天数" id="travelDays" name="travelDays" type="text" class="validate inputBlackSmall"  ><div class="newlineMobile"> * 可输入大概范围。 如：7天，7 - 9天</div><br/>
+                                <input placeholder="预计人数" id="peopleNumber" name="peopleNumber" type="text" class="validate inputBlackSmall"><div class="newlineMobile">  * 可输入大概范围。 如：3位成人，4 - 5成人，2儿童</div><br/>
+                                <input placeholder="您的姓名" id="fullName" name="fullName" type="text" class="validate inputBlack" style="width:68% !important" required="" aria-required="true" > <div class="newlineMobile">* 必填</div><br/>
+                                <input placeholder="您的邮箱" id="emailAddress" name="emailAddress" type="email" class="validate inputBlack" style="width:68% !important" required="" aria-required="true"><div class="newlineMobile"> * 必填</div><br/>
+                                <input placeholder="您的电话" id="phone" name="phone" type="text" class="validate inputBlack" style="width:73% !important"><br/>
+
+                                <textarea placeholder="需求说明" id="message" name="message"  class="validate inputTextAreaCus" ></textarea><br/><br/>
+
                             </div>
                         </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col s12 center">
-                        <div>
-                            <div class="cusDivLeft">   <img class="responsive-img" src="images/bridge.jpg"/></div>
-                            <div class="cusDivRight">
-                                <div class="left-align" >
-                                    <p class="cusTitle">
-                                        Signature Trip 特色之旅</p></div>
-                                <div> <a href="#9days"  class="waves-effect waves-light cusButtonBlack" >走南，闯北</a></div>
-                            </div>
+
+                        <div class="col s12 m12 center" >
+                            <a href="#onlineOrder"  class="waves-effect waves-light cusButtonBlack" style="width:190px" onclick="onlineOrder()">发送</a>
+                            <a href="docs/tips.pdf" target="_blank" class="waves-effect waves-light cusButtonBlack"  style="width:190px">出行装备&温馨提示</a>
                         </div>
-                    </div>
+                    </form>
                 </div>
 
             </div>
@@ -439,8 +521,8 @@
                         </div>
                         <div id="9days-3" class="col s12  ">
 
-                            <div> <a href="docs/9DaysZH.pdf"  class="waves-effect waves-light cusDownloadBlack"  > 西澳全景9日逍遥游 <br/>中文版</a>
-                                <a href="docs/9DaysEN.pdf"  class="waves-effect waves-light cusDownloadBlack"  >Western Australia <br/> 9 days Tour</a>
+                            <div> <a href="docs/9DaysZH.pdf"   target="_blank" class="waves-effect waves-light cusDownloadBlack"  > 西澳全景9日逍遥游 <br/>中文版</a>
+                                <a href="docs/9DaysEN.pdf"   target="_blank" class="waves-effect waves-light cusDownloadBlack"  >Western Australia <br/> 9 days Tour</a>
                             </div>
 
                         </div>
@@ -499,8 +581,14 @@
                         <h5 class="white-text">VIVID WA</h5>
 
                         <span class="white-text smallTitle"> PERTH</span>
-                        <span class="white-text smallTitle"> AUSTRALIA</span>
+                        <span class="white-text smallTitle"> AUSTRALIA</span><br/>
+                        <a href="#modalBank">  <img style="background-color:white"  width="90" height="60" src="images/paymentlogo/Westpac.jpeg"/>
+                        </a>
+                        <img style="background-color:white" width="90" height="60" src="images/paymentlogo/american_express.jpg"/>
+                        <img  style="background-color:white" width="90" height="60" src="images/paymentlogo/MasterCard.svg.png"/>
 
+                        <img style="background-color:white"  width="90" height="60" src="images/paymentlogo/omipay.png"/>
+                        <img  style="background-color:white" width="90" height="60" src="images/paymentlogo/visa.png"/>
                     </div>
                     <div class="col l3 s12">
                         <p class="white-text">  Level 1, 330 Churchill avenue, <br/>
@@ -509,8 +597,10 @@
                         </p>
                     </div>
                     <div class="col l3 s12">
-                        <p class="white-text"> <a class="white-text" href="tel:0893882208">电话: 08-93882208</a>
-                            <br/>邮箱: <a class="white-text" href="mailto:info@vividwa.com.au">info@vividwa.com.au</a></p>
+                        <p class="white-text"> <a class="white-text" href="tel:+61893882208">电话: +61-893882208</a>
+                            <br/>邮箱: <a class="white-text" href="mailto:info@vividwa.com.au">info@vividwa.com.au (一天内回复)</a>
+                            <br/>营业时间: 9:00 am - 5:00 pm (节假日除外)
+                        </p>
                     </div>
                     <div class="col l3 s12">
                         <p class="white-text"> 
@@ -530,11 +620,68 @@
             <div class="footer-copyright">
                 <a id="backTop" href="#">Back To Top</a>
                 <div class="container">
-                    © 2017 VIVIDWA. All rights reserved.
+                    © 2017 VIVIDWA. All rights reserved.  <a  style="color: rgba(255, 255, 255, 0.8);" href="#modalTC">Terms & Conditions 预订条款</a>
                 </div>
             </div>
         </footer>
 
+        <div id="modalTC" class="modal modal-fixed-footer">
+            <div class="modal-content" id="tcContent"></div>
+            <div class="modal-footer">
+                <a href="#!" class="modal-close waves-effect waves-green btn-flat">同意</a>
+            </div>
+        </div>
+
+        <div id="modalBank" class="modal modal-fixed-footer">
+            <div class="modal-content" id="bankContent">
+                <h4>银行信息</h4>
+                <p>
+                    银行: Westpac
+                    <br/>账户名称: Australian Tourism Association Pty Ltd
+                    <br/>BSB: 036-004
+                    <br/>账号: 552835
+                    <br/>Swift Code: WPACAU2S
+                    <br/> 银行地址: 116 James Street, Northbridge Western Australia, Australia, 6003
+                </p>
+            </div>
+            <div class="modal-footer">
+                <a href="#!" class="modal-close waves-effect waves-green btn-flat">确认</a>
+            </div>
+        </div>
+
+        <!-- Modal Structure -->
+        <div id="modalSuccess" class="modal">
+            <div class="modal-content">
+                <h4 class="fontText">Success</h4>
+                <p class="fontText">Email has been sent to our custom service team successfully.We will contact you in a few hours.</p>
+            </div>
+            <div class="modal-footer">
+                <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat fontText">OK</a>
+            </div>
+        </div>
+
+        <div id="modalError" class="modal">
+            <div class="modal-content">
+                <h4 class="fontText">Error</h4>
+                <p class="fontText">There is an error happend in our system. Send email info@vividwa.com.au directly</p>
+            </div>
+            <div class="modal-footer">
+                <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat fontText">OK</a>
+            </div>
+        </div>
+
+        <div id="customoverlay"></div>
+        <div class="preloader-wrapper big active" id="preloader" >
+            <div class="spinner-layer spinner-blue-only">
+                <div class="circle-clipper left">
+                    <div class="circle"></div>
+                </div><div class="gap-patch">
+                    <div class="circle"></div>
+                </div><div class="circle-clipper right">
+                    <div class="circle"></div>
+                </div>
+            </div>
+        </div>
 
     </body>
 </html>
